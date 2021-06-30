@@ -12,97 +12,106 @@ namespace WebApplication2.Controllers
 {
     public class BookController : Controller
     {
+        // GET: Book
+        BookManagerContext context = new BookManagerContext();
         public ActionResult ListBook()
         {
-            BookManagerContext context = new BookManagerContext();
-            var listBook = context.Books.ToList();
-            return View(listBook);
+            var listbook = context.Books.ToList();
+
+            return View(listbook);
         }
 
         [Authorize]
         public ActionResult Buy(int id)
         {
-            BookManagerContext context = new BookManagerContext();
-            Book book = context.Books.SingleOrDefault(p => p.ID == id);
+            Book book = context.Books.SingleOrDefault(p=>p.ID == id);
+
             if(book == null)
             {
                 return HttpNotFound();
             }
+
             return View(book);
         }
 
-        public ActionResult CreateBook()
+        [Authorize]
+        public ActionResult Create()
         {
-            BookManagerContext context = new BookManagerContext();
-            var listBook = context.Books.ToList();
             return View();
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Create([Bind(Include = "ID, Title, Author, Description, Images, Price")]Book book )
+        {
+            
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    context.Books.Add(book);
+                    context.SaveChanges();
+                }
+            }
+            catch (RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Error Save Data");
+            }
+
+            return RedirectToAction("ListBook","Book");
+        }
+
+        
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            Book book_e = context.Books.FirstOrDefault(p => p.ID == id);
+
+            return View(book_e);
         }
 
         [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult CreateBook(Book book, HttpPostedFileBase fileUpload)
-        {
-            BookManagerContext context = new BookManagerContext();
-            var fileName = Path.GetFileName(fileUpload.FileName);
-            var path = Path.Combine(Server.MapPath("~/Image"), fileName);
-            if(System.IO.File.Exists(path))
-            {
-                ViewBag.ThongBao = "hinh anh da ton tai";
-            }
-            else
-            {
-                fileUpload.SaveAs(path);
-            }
-            book.Images = fileName;
-            var b = new Book();
-            context.Books.AddOrUpdate(b);
-            context.SaveChanges();
-            return View("ListBook", book);
-        }
- 
-        public ActionResult EditBook()
-        {
-            return View();
-        }
-        [HttpPost, ActionName("EditBook")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditBook(int BookID)
+        [Authorize]
+        public ActionResult Edit(int ID, string Title, string Description, string Author, string Images, int Price )
         {
-            BookManagerContext context = new BookManagerContext();
-            Book dbUpdate = context.Books.FirstOrDefault(p => p.ID == BookID);
-            var b = new Book();
-            if (dbUpdate != null)
+            Book book_e = context.Books.FirstOrDefault(p => p.ID == ID);
+            if (book_e != null)
             {
-                context.Books.AddOrUpdate(b); //Add or Update Book b 
+                UpdateModel(book_e);
                 context.SaveChanges();
             }
-            return View("ListBook");
+
+            return RedirectToAction("ListBook", "Book");
         }
 
-        public ActionResult DeleteBook()
+        [Authorize]
+        public ActionResult Delete(int id)
         {
-            return View();
-        }
+            Book book = context.Books.SingleOrDefault(p => p.ID == id);
 
-        [HttpPost, ActionName("DeleteBook")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int BookID)
-        {
-            BookManagerContext context = new BookManagerContext();
-            Book dbDelete = context.Books.FirstOrDefault(p => p.ID == BookID);
-            var b = new Book();
-            if (dbDelete != null)
+            if (book == null)
             {
-                context.Books.Remove(b);
+                return HttpNotFound();
+            }
+
+            return View(book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Delete(Book book)
+        {
+            Book book_e = context.Books.FirstOrDefault(p => p.ID == book.ID);
+            if (book_e != null)
+            {
+                context.Books.Remove(book_e);
                 context.SaveChanges();
             }
-            return View("ListBook");
-        }
 
-        // GET: Book
-        public ActionResult Index()
-        {
-            return View();
+            return RedirectToAction("ListBook", "Book");
         }
     }
 }
