@@ -11,29 +11,44 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Book</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
 
-        @Html.HiddenFor(model => model.Title)
+<div class="form-horizontal">
+    <h4>Book</h4>
+    <hr />
+    <td>Title</td>
+    <td>
+        @Html.TextBoxFor(Model => Model.Title, new { @class = "form-control", placeholder = "Title" })
+    </td>
+    @Html.HiddenFor(model => model.Title)
+    <td>Title</td>
+    <td>
+        @Html.TextBoxFor(Model => Model.Description, new { @class = "form-control", placeholder = "Description" })
+    </td>
+    @Html.HiddenFor(model => model.Description)
+    <td>Title</td>
+    <td>
+        @Html.TextBoxFor(Model => Model.Author, new { @class = "form-control", placeholder = "Author" })
+    </td>
+    @Html.HiddenFor(model => model.Author)
+    <td>Title</td>
+    <td>
+        @Html.TextBoxFor(Model => Model.Images, new { @class = "form-control", placeholder = "Images" })
+    </td>
+    @Html.HiddenFor(model => model.Images)
+    <td>Title</td>
+    <td>
+        @Html.TextBoxFor(Model => Model.Price, new { @class = "form-control", placeholder = "Price" })
+    </td>
+    @Html.HiddenFor(model => model.Price)
 
-        @Html.HiddenFor(model => model.Description)
-
-        @Html.HiddenFor(model => model.Author)
-
-        @Html.HiddenFor(model => model.Images)
-
-        @Html.HiddenFor(model => model.Price)
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-danger" />
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-danger" />
         </div>
     </div>
+</div>
 }
 
 <div>

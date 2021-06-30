@@ -35,7 +35,7 @@ namespace WebApplication2.Controllers
         }
 
         [Authorize]
-        public ActionResult Create()
+        public ActionResult CreateBook()
         {
             return View();
         }
@@ -43,7 +43,7 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "ID, Title, Author, Description, Images, Price")]Book book )
+        public ActionResult CreateBook([Bind(Include = "ID, Title, Author, Description, Images, Price")]Book book )
         {
             
             try
@@ -64,7 +64,7 @@ namespace WebApplication2.Controllers
 
         
         [Authorize]
-        public ActionResult Edit(int id)
+        public ActionResult EditBook(int id)
         {
             Book book_e = context.Books.FirstOrDefault(p => p.ID == id);
 
@@ -74,7 +74,7 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit(int ID, string Title, string Description, string Author, string Images, int Price )
+        public ActionResult EditBook(int ID, string Title, string Description, string Author, string Images, int Price )
         {
             Book book_e = context.Books.FirstOrDefault(p => p.ID == ID);
             if (book_e != null)
@@ -87,7 +87,7 @@ namespace WebApplication2.Controllers
         }
 
         [Authorize]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteBook(int id)
         {
             Book book = context.Books.SingleOrDefault(p => p.ID == id);
 
@@ -102,7 +102,7 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Delete(Book book)
+        public ActionResult DeleteBook(Book book)
         {
             Book book_e = context.Books.FirstOrDefault(p => p.ID == book.ID);
             if (book_e != null)
