@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApplication2.Models.Book>
+
+@{
+    ViewBag.Title = "ListBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ListBook</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateBook")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Author
+        </th>
+        <th>
+            Img
+        </th>
+        <th>
+            Price
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Author)
+    </td>
+    <td>
+        <img src="@item.Images" width="80" />
+    </td>
+    <th>
+        @Html.DisplayFor(ModelItem => item.Price)
+    </th>
+    <td>
+        @Html.ActionLink("Edit", "EditBook", new { id = item.ID }) |
+        @Html.ActionLink("Delete", "DeleteBook", new { id = item.ID })
+    </td>
+    <td>
+        <a href="@Url.Action("Buy","Book",new { id = item.ID })" class="btn btn-primary">Buy</a>
+    </td>
+</tr>
+}
+
+</table>
